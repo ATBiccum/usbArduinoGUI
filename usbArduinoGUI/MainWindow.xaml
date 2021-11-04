@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:usbArduinoGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+        Title="USB Arduino" Height="450" Width="800">
+    <StackPanel>
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="butt_OpenClose" Content="Open" Click="butt_OpenClose_Click"/>
+            <Button x:Name="butt_Clear" Content="Clear" Click="butt_Clear_Click"/>
+            <ComboBox x:Name="comboBox1"/>
+        </StackPanel>
+        <TextBox x:Name="text_Received" TextWrapping="Wrap" Height="Auto" MaxHeight="360" VerticalScrollBarVisibility="Auto"/>
+   </StackPanel>
 </Window>

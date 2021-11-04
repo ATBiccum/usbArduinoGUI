@@ -6,4 +6,8 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="System.IO.Ports" Version="6.0.0-rc.2.21480.5" />
+  </ItemGroup>
+
 </Project>
