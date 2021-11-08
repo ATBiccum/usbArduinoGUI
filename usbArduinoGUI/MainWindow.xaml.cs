@@ -53,13 +53,13 @@ namespace usbArduinoGUI
                 //Note text from serial port is on a different thread and we need to test this
                 text = serialport.ReadLine();                   //Read the line because carriage line return and new line, it does these for us
 
-                if (text_Received.Dispatcher.CheckAccess())     //If we have access to the thread then update the ui
+                if (text_packetReceived.Dispatcher.CheckAccess())     //If we have access to the thread then update the ui
                 {
                     UpdateUI(text);
                 }
                 else
                 {                                               //If we do not have access to the thread
-                    text_Received.Dispatcher.Invoke(() => { UpdateUI(text); });
+                    text_packetReceived.Dispatcher.Invoke(() => { UpdateUI(text); });
                 }
             }
             catch (TimeoutException) { }                        //If no data is received then timeout error
@@ -67,7 +67,29 @@ namespace usbArduinoGUI
 
         private void UpdateUI(string text)
         {
-            text_Received.Text = text + text_Received.Text;
+            text_packetReceived.Text = text + text_packetReceived.Text; //Show the received text
+
+            int checkSumCalc = 0;
+            text_packetLength.Text = text.Length.ToString();
+            if (text.Substring(0,3)=="###" && text.Length > 41) //Are we receiving a real packet?
+            {
+                text_packetNumber.Text = text.Substring(3, 3);
+                text_A0.Text = text.Substring(6, 4);
+                text_A1.Text = text.Substring(10, 4);
+                text_A2.Text = text.Substring(14, 4);
+                text_A3.Text = text.Substring(18, 4);
+                text_A4.Text = text.Substring(22, 4);
+                text_A5.Text = text.Substring(26, 4);
+                text_Binary.Text = text.Substring(30,4);
+                text_checkSumReceived.Text = text.Substring(38,3);
+
+                for (int i=3; i<38; i++)
+                {
+                    checkSumCalc += (byte)text[i];
+                }
+
+                text_checkSumCalculated.Text = checkSumCalc.ToString();
+            }
         }
 
         private void butt_OpenClose_Click(object sender, RoutedEventArgs e)
@@ -89,7 +111,7 @@ namespace usbArduinoGUI
 
         private void butt_Clear_Click(object sender, RoutedEventArgs e)
         {
-            text_Received.Text = "";
+            text_packetReceived.Text = "";
         }
     }
 }
