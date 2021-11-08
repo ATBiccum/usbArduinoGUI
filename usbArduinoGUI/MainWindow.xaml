@@ -5,13 +5,112 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:usbArduinoGUI"
         mc:Ignorable="d"
-        Title="USB Arduino" Height="450" Width="800">
-    <StackPanel>
-        <StackPanel Orientation="Horizontal">
-            <Button x:Name="butt_OpenClose" Content="Open" Click="butt_OpenClose_Click"/>
-            <Button x:Name="butt_Clear" Content="Clear" Click="butt_Clear_Click"/>
-            <ComboBox x:Name="comboBox1"/>
-        </StackPanel>
-        <TextBox x:Name="text_Received" TextWrapping="Wrap" Height="Auto" MaxHeight="360" VerticalScrollBarVisibility="Auto"/>
-   </StackPanel>
+        Title="USB Meadow" Height="500" Width="800">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Button x:Name="butt_OpenClose" 
+                Content="Open" 
+                Click="butt_OpenClose_Click"
+                Margin="10,2,10,2"
+                Grid.Column="0"
+                Grid.Row="0"/>
+        <Button x:Name="butt_Clear" 
+                Content="Clear" 
+                Click="butt_Clear_Click"
+                Margin="10,2,10,2"
+                Grid.Column="1"
+                Grid.Row="0"/>
+        <Label Grid.Row="1">Port</Label>
+        <ComboBox x:Name="comboBox1"
+                Grid.Column="1"
+                  Grid.Row="1"/>
+
+        <Label Grid.Row="2">Packet</Label>
+        <TextBox x:Name="text_Received" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="2"/>
+        <Label Grid.Row="2">Number</Label>
+        <TextBox x:Name="text_Number" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="3"/>
+        <Label Grid.Row="2">Length</Label>
+        <TextBox x:Name="text_Length" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="4"/>
+        <Label Grid.Row="2">Analog 0</Label>
+        <TextBox x:Name="text_A0" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="5"/>
+        <Label Grid.Row="2">Analog 1</Label>
+        <TextBox x:Name="text_A0" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="5"/>
+        <Label Grid.Row="2">Analog 2</Label>
+        <TextBox x:Name="text_A0" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="5"/>
+        <Label Grid.Row="2">Analog 3</Label>
+        <TextBox x:Name="text_A0" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="5"/>
+        <Label Grid.Row="2">Analog 4</Label>
+        <TextBox x:Name="text_A0" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="5"/>
+        <Label Grid.Row="2">Analog 5</Label>
+        <TextBox x:Name="text_A0" 
+                 TextWrapping="Wrap" 
+                 Height="Auto" MaxHeight="360" 
+                 VerticalScrollBarVisibility="Auto"
+                 Grid.Column="1"
+                 Grid.Row="5"/>
+    </Grid>
+
 </Window>

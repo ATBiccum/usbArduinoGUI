@@ -62,7 +62,7 @@ namespace usbArduinoGUI
                     text_Received.Dispatcher.Invoke(() => { UpdateUI(text); });
                 }
             }
-            catch (TimeoutException) { }
+            catch (TimeoutException) { }                        //If no data is received then timeout error
         }
 
         private void UpdateUI(string text)
@@ -89,7 +89,7 @@ namespace usbArduinoGUI
 
         private void butt_Clear_Click(object sender, RoutedEventArgs e)
         {
-
+            text_Received.Text = "";
         }
     }
 }
