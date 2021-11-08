@@ -1,4 +1,12 @@
-﻿using System;
+﻿/* meadowBallAnimation Project
+ * 
+ * ECET 230
+ * Camosun College
+ * Tony Biccum
+ * November 4th, 2021
+ * 
+ */
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +42,7 @@ namespace usbArduinoGUI
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            string[] ports = SerialPort.GetPortNames();
+            string[] ports = SerialPort.GetPortNames(); //Receive the available open ports
             serialport.BaudRate = 115200;               //Setup baud rate for spi
             serialport.ReceivedBytesThreshold = 1;      //How many bytes we receive before we trigger event
             serialport.DataReceived += SerialPort_DataReceived;
@@ -67,25 +75,29 @@ namespace usbArduinoGUI
 
         private void UpdateUI(string text)
         {
-            text_packetReceived.Text = text + text_packetReceived.Text; //Show the received text
-
             int checkSumCalc = 0;
-            text_packetLength.Text = text.Length.ToString();
-            if (text.Substring(0,3)=="###" && text.Length > 41) //Are we receiving a real packet?
-            {
-                text_packetNumber.Text = text.Substring(3, 3);
-                text_A0.Text = text.Substring(6, 4);
-                text_A1.Text = text.Substring(10, 4);
-                text_A2.Text = text.Substring(14, 4);
-                text_A3.Text = text.Substring(18, 4);
-                text_A4.Text = text.Substring(22, 4);
-                text_A5.Text = text.Substring(26, 4);
-                text_Binary.Text = text.Substring(30,4);
-                text_checkSumReceived.Text = text.Substring(38,3);
 
-                for (int i=3; i<38; i++)
+            text_packetReceived.Text = text + text_packetReceived.Text; //Show the received text
+            text_packetLength.Text = text.Length.ToString();
+            //Note that paseSubString will increment over the number of chars that we pass to it
+            parseSubString parseSubString = new parseSubString();
+
+            if (parseSubString.parseString(text, 3)=="###" && text.Length > 41) //Are we receiving a real packet?
+            {
+                //If a real packet then save the corresponding bytes:
+                text_packetNumber.Text = parseSubString.parseString(text, 3);
+                text_A0.Text = parseSubString.parseString(text, 4);
+                text_A1.Text = parseSubString.parseString(text, 4);
+                text_A2.Text = parseSubString.parseString(text, 4);
+                text_A3.Text = parseSubString.parseString(text, 4);
+                text_A4.Text = parseSubString.parseString(text, 4);
+                text_A5.Text = parseSubString.parseString(text, 4);
+                text_Binary.Text = parseSubString.parseString(text, 8);
+                text_checkSumReceived.Text = parseSubString.parseString(text, 3);
+
+                for (int i=3; i<38; i++)    //Calculate the check sum 
                 {
-                    checkSumCalc += (byte)text[i];
+                    checkSumCalc += (byte)text[i]; //Sum all the bytes within text variable (received from data_received method)
                 }
 
                 text_checkSumCalculated.Text = checkSumCalc.ToString();
@@ -111,7 +123,7 @@ namespace usbArduinoGUI
 
         private void butt_Clear_Click(object sender, RoutedEventArgs e)
         {
-            text_packetReceived.Text = "";
+            text_packetReceived.Text = ""; //Clear the packet to nothing
         }
     }
 }
