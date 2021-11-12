@@ -1,4 +1,4 @@
-﻿/* meadowBallAnimation Project
+﻿/* USBmeadowGUI Project
  * 
  * ECET 230
  * Camosun College
@@ -60,6 +60,7 @@ namespace usbArduinoGUI
             {
                 //Note text from serial port is on a different thread and we need to test this
                 text = serialport.ReadLine();                   //Read the line because carriage line return and new line, it does these for us
+                text = text.ToString();
 
                 if (text_packetReceived.Dispatcher.CheckAccess())     //If we have access to the thread then update the ui
                 {
@@ -79,10 +80,11 @@ namespace usbArduinoGUI
 
             text_packetReceived.Text = text + text_packetReceived.Text; //Show the received text
             text_packetLength.Text = text.Length.ToString();
+
             //Note that paseSubString will increment over the number of chars that we pass to it
             parseSubString parseSubString = new parseSubString();
 
-            if (parseSubString.parseString(text, 3)=="###" && text.Length > 41) //Are we receiving a real packet?
+            if (text.Substring(0, 3) == "###" && text.Length == 38) //Are we receiving a real packet? 
             {
                 //If a real packet then save the corresponding bytes:
                 text_packetNumber.Text = parseSubString.parseString(text, 3);
@@ -95,11 +97,11 @@ namespace usbArduinoGUI
                 text_Binary.Text = parseSubString.parseString(text, 8);
                 text_checkSumReceived.Text = parseSubString.parseString(text, 3);
 
-                for (int i=3; i<38; i++)    //Calculate the check sum 
+                for (int i=0; i<38; i++)    //Calculate the check sum 
                 {
                     checkSumCalc += (byte)text[i]; //Sum all the bytes within text variable (received from data_received method)
                 }
-
+                checkSumCalc -= 1000;
                 text_checkSumCalculated.Text = checkSumCalc.ToString();
             }
         }
@@ -124,6 +126,22 @@ namespace usbArduinoGUI
         private void butt_Clear_Click(object sender, RoutedEventArgs e)
         {
             text_packetReceived.Text = ""; //Clear the packet to nothing
+        }
+    }
+    public class parseSubString
+    {
+        private int subStringLocation { get; set; }
+
+        public parseSubString()
+        {
+            subStringLocation = 0; //Set the inital location within the string[]
+        }
+
+        public string parseString(string stringToParse, int numberOfChars)
+        {   //Fill returnString with a subString of stringToParse, using a byte usually(numberofChars)
+            string returnString = stringToParse.Substring(subStringLocation, numberOfChars);
+            subStringLocation += numberOfChars; //Increment subStringLocation by the numberofchars each pass
+            return returnString;
         }
     }
 }

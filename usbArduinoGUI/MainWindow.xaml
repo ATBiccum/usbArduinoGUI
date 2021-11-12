@@ -57,7 +57,8 @@
                  VerticalScrollBarVisibility="Auto"
                  Grid.Column="2"
                  Grid.Row="0"
-                 Grid.RowSpan="17"/>
+                 Grid.RowSpan="17"
+                 Width="Auto"/>
         <Label Grid.Row="3">Number</Label>
         <TextBox x:Name="text_packetNumber" 
                  Grid.Column="1"
