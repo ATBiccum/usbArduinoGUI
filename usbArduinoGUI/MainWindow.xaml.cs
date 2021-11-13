@@ -117,11 +117,12 @@ namespace usbArduinoGUI
                 var checkSumReceived = Convert.ToInt32(text_checkSumReceived.Text);
                 if (checkSumReceived == checkSumCalculated)
                 {
-                    displaySolarData(text);
+                    displaySolarData(text);                                 //Display solar data if there is no error
                 }
+                else
                 {
-                    checkSumError++;
-                    text_checkSumError.Text = checkSumError.ToString();
+                    checkSumError++;                                        //Record an error
+                    text_checkSumError.Text = checkSumError.ToString();     //Print the amount of errors into the text box
                 }
 
                 if (oldPacketNumber > -1 && newPacketNumber == 0)
@@ -138,6 +139,7 @@ namespace usbArduinoGUI
                         if (newPacketNumber != oldPacketNumber + 1)
                         {
                             lostPacketCount++;
+                            text_packetLost.Text = lostPacketCount.ToString();
                         }
                     }
                 }
@@ -174,9 +176,17 @@ namespace usbArduinoGUI
 
         private void butt_Send_Click(object sender, RoutedEventArgs e)
         {
-
+            sendPacket();
+        }
+        private void sendPacket()
+        {
+            string messageOut = text_Send.Text;
+            messageOut += "\r\n";
+            byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);
+            serialport.Write(messageBytes, 0, messageBytes.Length);
         }
     }
+
     public class parseSubString
     {
         private int subStringLocation { get; set; }
@@ -192,5 +202,5 @@ namespace usbArduinoGUI
             subStringLocation += numberOfChars; //Increment subStringLocation by the numberofchars each pass
             return returnString;
         }
-    }
+    }    
 }
