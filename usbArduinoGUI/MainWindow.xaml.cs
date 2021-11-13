@@ -52,6 +52,7 @@ namespace usbArduinoGUI
                 comboBox1.Items.Add(port);
             }
             comboBox1.SelectedIndex = 2;                //Select the correct port from the list
+            text_packetReceived.Text = "###0000000000000000000000000000000000";
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -84,7 +85,7 @@ namespace usbArduinoGUI
             //Note that paseSubString will increment over the number of chars that we pass to it
             parseSubString parseSubString = new parseSubString();
 
-            if (text.Substring(0, 3) == "###" && text.Length == 38) //Are we receiving a real packet? 
+            if (text.Substring(0, 3) == "###" && text.Length > 37) //Are we receiving a real packet? 
             {
                 //If a real packet then save the corresponding bytes:
                 string placeholder = parseSubString.parseString(text, 3);
@@ -98,7 +99,8 @@ namespace usbArduinoGUI
                 text_Binary.Text = parseSubString.parseString(text, 4);
                 text_checkSumReceived.Text = parseSubString.parseString(text, 3);
 
-                for (int i=0; i<38; i++)    //Calculate the check sum 
+                int len = text.Length;
+                for (int i=3; i<34; i++)    //Calculate the check sum 
                 {
                     checkSumCalc += (byte)text[i]; //Sum all the bytes within text variable (received from data_received method)
                 }
