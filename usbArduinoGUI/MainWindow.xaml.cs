@@ -39,6 +39,7 @@ namespace usbArduinoGUI
         private int lostPacketCount = 0;
         private int packetRollover = 0;
 
+        StringBuilder stringBuilder = new StringBuilder("###111196");
         SerialPort serialport = new SerialPort();
 
         public MainWindow()
@@ -60,6 +61,8 @@ namespace usbArduinoGUI
             }
             comboBox1.SelectedIndex = 2;                //Select the correct port from the list
             text_packetReceived.Text = "###0000000000000000000000000000000000";
+            text_Send.Text = "###0000000";
+            text_checkSumError.Text = "0";
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -111,8 +114,9 @@ namespace usbArduinoGUI
                 {
                     checkSumCalculated += (byte)text[i]; //Sum all the bytes within text variable (received from data_received method)
                 }
-                checkSumCalculated -= 1000; //Subtract 1000 for formatting
+                checkSumCalculated %= 1000;
                 text_checkSumCalculated.Text = checkSumCalculated.ToString(); //Put the calculated check sum into the box
+
                 //Calculate error if there is any, if no error just display the solar values
                 var checkSumReceived = Convert.ToInt32(text_checkSumReceived.Text);
                 if (checkSumReceived == checkSumCalculated)
@@ -180,11 +184,64 @@ namespace usbArduinoGUI
         }
         private void sendPacket()
         {
-            string messageOut = text_Send.Text;
-            messageOut += "\r\n";
-            byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);
-            serialport.Write(messageBytes, 0, messageBytes.Length);
+            try
+            {
+                int txCheckSum = 0;
+                for (int i = 0; i < 7; i++)
+                {
+                    txCheckSum += (byte)stringBuilder[i];                   //Add up the bytes that were passed to string builder
+                }
+                txCheckSum %= 1000;
+
+                stringBuilder.Remove(7, 3);                                 //Remove the check sum at index 7 size 3
+                stringBuilder.Insert(7, txCheckSum.ToString("D3"));         //Add D3 to make sure theres the right number of digits
+                string messageOut = text_Send.Text;                         //Read the packet in the box
+                messageOut += "\r\n";                                       //Add a carriage and line return to message
+                byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);   //Convert to a byte array
+                serialport.Write(messageBytes, 0, messageBytes.Length);     //Write the bytes to the serial port to send
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);                            //Throw an exception instead of crashing
+            }
         }
+
+        private void butt_bit0_Click(object sender, RoutedEventArgs e)
+        {
+            ButtonClicked(0);
+        }
+
+        private void butt_bit1_Click(object sender, MouseEventArgs e)
+        {
+            ButtonClicked(1);
+        }
+
+        private void butt_bit2_Click(object sender, MouseEventArgs e)
+        {
+            ButtonClicked(2);
+        }
+
+        private void butt_bit3_Click(object sender, MouseEventArgs e)
+        {
+            ButtonClicked(3);
+        }
+
+        private void ButtonClicked(int i)
+        {
+            Button[] butt_bit = new Button[] { butt_bit0, butt_bit1, butt_bit2, butt_bit3 };
+            if (butt_bit[i].Content.ToString() == "0")
+            {
+                butt_bit[i].Content = "1";
+                stringBuilder[i + 3] = '1';
+            }
+            else
+            {
+                butt_bit[i].Content = "0";
+                stringBuilder[i + 3] = '0';
+            }
+            sendPacket();
+        }
+
     }
 
     public class parseSubString

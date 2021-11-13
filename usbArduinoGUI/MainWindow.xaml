@@ -58,12 +58,51 @@
                  Grid.Column="3"
                  Grid.Row="0"
                  Width="100"
-                 HorizontalAlignment="Left"/>
+                 HorizontalAlignment="Left"
+                 HorizontalContentAlignment="Center"
+                 VerticalContentAlignment="Center"
+                 IsEnabled="False"/>
         <Label Grid.Row="1">Port</Label>
         <ComboBox x:Name="comboBox1"
                   Grid.Column="1"
                   Margin="10,3,10,3"
                   Grid.Row="1"/>
+
+        <Label Grid.Row="1" Grid.Column="2">Bits</Label>
+        <Grid Grid.Column="3" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition  Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Button x:Name="butt_bit0" 
+                    Content="1" 
+                    Margin="1,3,1,3"
+                    Width="18"
+                    Grid.Column="0"
+                    Click="butt_bit0_Click"/>
+            <Button x:Name="butt_bit1" 
+                    Content="1" 
+                    Margin="0,3,1,3"
+                    Width="18"
+                    Grid.Column="1"
+                    Click="butt_bit1_Click" 
+                    HorizontalAlignment="Right"/>
+            <Button x:Name="butt_bit2" 
+                    Content="1" 
+                    Margin="1,3,1,3"
+                    Width="18"
+                    Grid.Column="2"
+                    Click="butt_bit2_Click"/>
+            <Button x:Name="butt_bit3" 
+                    Content="1" 
+                    Margin="1,3,1,3"
+                    Width="18"
+                    Grid.Column="3"
+                    Click="butt_bit3_Click"/>
+        </Grid>
 
         <Label Grid.Row="2" 
                Grid.ColumnSpan="2" 
@@ -79,67 +118,82 @@
                  Grid.Row="3"
                  Grid.RowSpan="16"
                  Width="265" 
-                 Grid.ColumnSpan="2" />
+                 Grid.ColumnSpan="2"
+                 HorizontalContentAlignment="Center"/>
         <Label Grid.Row="3">Number</Label>
         <TextBox x:Name="text_packetNumber" 
                  Grid.Column="1"
-                 Grid.Row="3"/>
+                 Grid.Row="3"
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="4">Length</Label>
         <TextBox x:Name="text_packetLength" 
                  Grid.Column="1"
-                 Grid.Row="4"/>
+                 Grid.Row="4"
+                 VerticalContentAlignment="Center"/>
 
         <Label Grid.Row="5" Grid.ColumnSpan="2" HorizontalAlignment="Center">Raw Data</Label>
         <Label Grid.Row="6">Analog 0</Label>
         <TextBox x:Name="text_A0" 
                  Grid.Column="1"
-                 Grid.Row="6"/>
+                 Grid.Row="6"
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="7">Analog 1</Label>
         <TextBox x:Name="text_A1" 
                  Grid.Column="1"
-                 Grid.Row="7"/>
+                 Grid.Row="7"
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="8">Analog 2</Label>
         <TextBox x:Name="text_A2" 
                  Grid.Column="1"
-                 Grid.Row="8"/>
+                 Grid.Row="8"                 
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="9">Analog 3</Label>
         <TextBox x:Name="text_A3" 
                  Grid.Column="1"
-                 Grid.Row="9"/>
+                 Grid.Row="9"                 
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="10">Analog 4</Label>
         <TextBox x:Name="text_A4" 
                  Grid.Column="1"
-                 Grid.Row="10"/>
+                 Grid.Row="10"                
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="11">Analog 5</Label>
         <TextBox x:Name="text_A5" 
                  Grid.Column="1"
-                 Grid.Row="11"/>
+                 Grid.Row="11"                 
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="12">Binary</Label>
         <TextBox x:Name="text_Binary" 
                  Grid.Column="1"
-                 Grid.Row="12"/>
+                 Grid.Row="12"                 
+                 VerticalContentAlignment="Center"/>
 
         <Label Grid.Row="13" Grid.ColumnSpan="2" HorizontalAlignment="Center">Checksum</Label>
         <Label Grid.Row="14">Received</Label>
         <TextBox x:Name="text_checkSumReceived" 
                  Grid.Column="1"
-                 Grid.Row="14"/>
+                 Grid.Row="14"                 
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="15">Calculated</Label>
         <TextBox x:Name="text_checkSumCalculated" 
                  Grid.Column="1"
-                 Grid.Row="15"/>
+                 Grid.Row="15"                 
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="16">Packet Lost</Label>
         <TextBox x:Name="text_packetLost" 
                  Grid.Column="1"
-                 Grid.Row="16"/>
+                 Grid.Row="16"                 
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="17">Check Sum Error</Label>
         <TextBox x:Name="text_checkSumError" 
                  Grid.Column="1"
-                 Grid.Row="17"/>
+                 Grid.Row="17"                 
+                 VerticalContentAlignment="Center"/>
         <Label Grid.Row="18">Rollover</Label>
         <TextBox x:Name="text_packetRollover" 
                  Grid.Column="1"
-                 Grid.Row="18"/>
+                 Grid.Row="18"                 
+                 VerticalContentAlignment="Center"/>
     </Grid>
 
 </Window>
