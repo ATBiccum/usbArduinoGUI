@@ -31,6 +31,8 @@ namespace usbArduinoGUI
     {
         private bool bPortOpen = false;
         private string text;
+        private int checkSumError = 0;
+        private int checkSumCalculated = 0;
 
         SerialPort serialport = new SerialPort();
 
@@ -77,8 +79,6 @@ namespace usbArduinoGUI
 
         private void UpdateUI(string text)
         {
-            int checkSumCalc = 0;
-
             text_packetReceived.Text = text + text_packetReceived.Text; //Show the received text
             text_packetLength.Text = text.Length.ToString();
 
@@ -88,7 +88,7 @@ namespace usbArduinoGUI
             if (text.Substring(0, 3) == "###" && text.Length > 37) //Are we receiving a real packet? 
             {
                 //If a real packet then save the corresponding bytes:
-                string placeholder = parseSubString.parseString(text, 3);
+                string placeholder = parseSubString.parseString(text, 3); //Place holds our 3 hashtags to parse correctly 
                 text_packetNumber.Text = parseSubString.parseString(text, 3);
                 text_A0.Text = parseSubString.parseString(text, 4);
                 text_A1.Text = parseSubString.parseString(text, 4);
@@ -98,15 +98,31 @@ namespace usbArduinoGUI
                 text_A5.Text = parseSubString.parseString(text, 4);
                 text_Binary.Text = parseSubString.parseString(text, 4);
                 text_checkSumReceived.Text = parseSubString.parseString(text, 3);
-
-                int len = text.Length;
-                for (int i=3; i<34; i++)    //Calculate the check sum 
+                
+                //CHECK SUM BUSINESS
+                for (int i=3; i<34; i++)    
                 {
-                    checkSumCalc += (byte)text[i]; //Sum all the bytes within text variable (received from data_received method)
+                    checkSumCalculated += (byte)text[i]; //Sum all the bytes within text variable (received from data_received method)
                 }
-                checkSumCalc -= 1000;
-                text_checkSumCalculated.Text = checkSumCalc.ToString();
+                checkSumCalculated -= 1000; //Subtract 1000 for formatting
+                text_checkSumCalculated.Text = checkSumCalculated.ToString(); //Put the calculated check sum into the box
+                //Calculate error if there is any, if no error just display the solar values
+                var checkSumReceived = Convert.ToInt32(text_checkSumReceived.Text);
+                if (checkSumReceived == checkSumCalculated)
+                {
+                    displaySolarData(text);
+                }
+                else
+                {
+                    checkSumError = checkSumReceived - checkSumCalculated;
+                    text_checkSumError.Text = checkSumError.ToString();
+                }
             }
+        }
+
+        private void displaySolarData(string text)
+        {
+            //Display data for solar
         }
 
         private void butt_OpenClose_Click(object sender, RoutedEventArgs e)
