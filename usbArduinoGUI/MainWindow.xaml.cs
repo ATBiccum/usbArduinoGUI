@@ -87,6 +87,7 @@ namespace usbArduinoGUI
             if (text.Substring(0, 3) == "###" && text.Length == 38) //Are we receiving a real packet? 
             {
                 //If a real packet then save the corresponding bytes:
+                string placeholder = parseSubString.parseString(text, 3);
                 text_packetNumber.Text = parseSubString.parseString(text, 3);
                 text_A0.Text = parseSubString.parseString(text, 4);
                 text_A1.Text = parseSubString.parseString(text, 4);
@@ -94,7 +95,7 @@ namespace usbArduinoGUI
                 text_A3.Text = parseSubString.parseString(text, 4);
                 text_A4.Text = parseSubString.parseString(text, 4);
                 text_A5.Text = parseSubString.parseString(text, 4);
-                text_Binary.Text = parseSubString.parseString(text, 8);
+                text_Binary.Text = parseSubString.parseString(text, 4);
                 text_checkSumReceived.Text = parseSubString.parseString(text, 3);
 
                 for (int i=0; i<38; i++)    //Calculate the check sum 
