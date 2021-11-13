@@ -31,8 +31,13 @@ namespace usbArduinoGUI
     {
         private bool bPortOpen = false;
         private string text;
+
         private int checkSumError = 0;
         private int checkSumCalculated = 0;
+        private int oldPacketNumber = -1;
+        private int newPacketNumber = 0;
+        private int lostPacketCount = 0;
+        private int packetRollover = 0;
 
         SerialPort serialport = new SerialPort();
 
@@ -79,6 +84,8 @@ namespace usbArduinoGUI
 
         private void UpdateUI(string text)
         {
+            checkSumCalculated = 0; //Reset the calculated checksum otherwise it will keep addin
+
             text_packetReceived.Text = text + text_packetReceived.Text; //Show the received text
             text_packetLength.Text = text.Length.ToString();
 
@@ -112,11 +119,29 @@ namespace usbArduinoGUI
                 {
                     displaySolarData(text);
                 }
-                else
                 {
-                    checkSumError = checkSumReceived - checkSumCalculated;
+                    checkSumError++;
                     text_checkSumError.Text = checkSumError.ToString();
                 }
+
+                if (oldPacketNumber > -1 && newPacketNumber == 0)
+                {
+                    packetRollover++;
+                    text_packetRollover.Text = packetRollover.ToString();
+                    if (oldPacketNumber != 999)
+                    {
+                        lostPacketCount++;
+                        text_packetLost.Text = lostPacketCount.ToString();
+                    }
+                    else
+                    {
+                        if (newPacketNumber != oldPacketNumber + 1)
+                        {
+                            lostPacketCount++;
+                        }
+                    }
+                }
+                oldPacketNumber = newPacketNumber;
             }
         }
 
@@ -145,6 +170,11 @@ namespace usbArduinoGUI
         private void butt_Clear_Click(object sender, RoutedEventArgs e)
         {
             text_packetReceived.Text = ""; //Clear the packet to nothing
+        }
+
+        private void butt_Send_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
     public class parseSubString
