@@ -184,27 +184,29 @@ namespace usbArduinoGUI
         private void butt_Send_Click(object sender, RoutedEventArgs e)
         {
             sendPacket();
+            text_Send.Text = "Sending it";
         }
+
         private void sendPacket()
          {
              try
              {
-                 for (int i = 3; i < 7; i++)
-                 {
-                     txCheckSum += (byte)stringBuilder[i];                   //Add up the bytes that were passed to string builder
-                 }
-                 txCheckSum %= 1000;
+                for (int i = 3; i < 7; i++)
+                {
+                    txCheckSum += (byte)stringBuilder[i];                   //Add up the bytes that were passed to string builder
+                }
+                    txCheckSum %= 1000;
 
-                 stringBuilder.Remove(7, 3);                                 //Remove the check sum at index 7 size 3
-                 stringBuilder.Insert(7, txCheckSum.ToString("D3"));         //Add D3 to make sure theres the right number of digits
-                 text_Send.Text = stringBuilder.ToString();
+                    stringBuilder.Remove(7, 3);                                 //Remove the check sum at index 7 size 3
+                    stringBuilder.Insert(7, txCheckSum.ToString("D3"));         //Add D3 to make sure theres the right number of digits
+                    text_Send.Text = stringBuilder.ToString();
 
-                 string messageOut = stringBuilder.ToString();               //Read the packet in the box
-                 messageOut += "\r\n";                                       //Add a carriage and line return to message
-                 byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);   //Convert to a byte array
-                 serialport.Write(messageBytes, 0, messageBytes.Length);     //Write the bytes to the serial port to send
-                 txCheckSum = 0; 
-            }
+                    string messageOut = stringBuilder.ToString();               //Read the packet in the box
+                    messageOut += "\r\n";                                       //Add a carriage and line return to message
+                    byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);   //Convert to a byte array
+                    serialport.Write(messageBytes, 0, messageBytes.Length);     //Write the bytes to the serial port to send
+                    txCheckSum = 0; 
+             }
              catch (Exception ex)
              {
                  MessageBox.Show(ex.Message);                            //Throw an exception instead of crashing
