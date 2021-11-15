@@ -38,9 +38,10 @@ namespace usbArduinoGUI
         private int newPacketNumber = 0;
         private int lostPacketCount = 0;
         private int packetRollover = 0;
+        private int txCheckSum;
 
-        StringBuilder stringBuilder = new StringBuilder("###111196");
-        SerialPort serialport = new SerialPort();
+        private StringBuilder stringBuilder = new StringBuilder("###1111196");
+        private SerialPort serialport = new SerialPort();
 
         public MainWindow()
         {
@@ -63,6 +64,8 @@ namespace usbArduinoGUI
             text_packetReceived.Text = "###0000000000000000000000000000000000";
             text_Send.Text = "###0000000";
             text_checkSumError.Text = "0";
+            text_packetRollover.Text = "0";
+            text_packetLost.Text = "0";
         }
 
         private void SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
@@ -183,50 +186,32 @@ namespace usbArduinoGUI
             sendPacket();
         }
         private void sendPacket()
-        {
-            try
-            {
-                int txCheckSum = 0;
-                for (int i = 0; i < 7; i++)
-                {
-                    txCheckSum += (byte)stringBuilder[i];                   //Add up the bytes that were passed to string builder
-                }
-                txCheckSum %= 1000;
+         {
+             try
+             {
+                 for (int i = 3; i < 7; i++)
+                 {
+                     txCheckSum += (byte)stringBuilder[i];                   //Add up the bytes that were passed to string builder
+                 }
+                 txCheckSum %= 1000;
 
-                stringBuilder.Remove(7, 3);                                 //Remove the check sum at index 7 size 3
-                stringBuilder.Insert(7, txCheckSum.ToString("D3"));         //Add D3 to make sure theres the right number of digits
-                string messageOut = text_Send.Text;                         //Read the packet in the box
-                messageOut += "\r\n";                                       //Add a carriage and line return to message
-                byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);   //Convert to a byte array
-                serialport.Write(messageBytes, 0, messageBytes.Length);     //Write the bytes to the serial port to send
+                 stringBuilder.Remove(7, 3);                                 //Remove the check sum at index 7 size 3
+                 stringBuilder.Insert(7, txCheckSum.ToString("D3"));         //Add D3 to make sure theres the right number of digits
+                 text_Send.Text = stringBuilder.ToString();
+
+                 string messageOut = stringBuilder.ToString();               //Read the packet in the box
+                 messageOut += "\r\n";                                       //Add a carriage and line return to message
+                 byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);   //Convert to a byte array
+                 serialport.Write(messageBytes, 0, messageBytes.Length);     //Write the bytes to the serial port to send
+                 txCheckSum = 0; 
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);                            //Throw an exception instead of crashing
-            }
-        }
+             catch (Exception ex)
+             {
+                 MessageBox.Show(ex.Message);                            //Throw an exception instead of crashing
+             }
+         }
 
-        private void butt_bit0_Click(object sender, RoutedEventArgs e)
-        {
-            ButtonClicked(0);
-        }
-
-        private void butt_bit1_Click(object sender, MouseEventArgs e)
-        {
-            ButtonClicked(1);
-        }
-
-        private void butt_bit2_Click(object sender, MouseEventArgs e)
-        {
-            ButtonClicked(2);
-        }
-
-        private void butt_bit3_Click(object sender, MouseEventArgs e)
-        {
-            ButtonClicked(3);
-        }
-
-        private void ButtonClicked(int i)
+        private void buttonClicked(int i)
         {
             Button[] butt_bit = new Button[] { butt_bit0, butt_bit1, butt_bit2, butt_bit3 };
             if (butt_bit[i].Content.ToString() == "0")
@@ -241,7 +226,23 @@ namespace usbArduinoGUI
             }
             sendPacket();
         }
+        private void butt_bit0_Click(object sender, RoutedEventArgs e)
+        {
+            buttonClicked(0);
+        }
+        private void butt_bit1_Click(object sender, RoutedEventArgs e)
+        {
+            buttonClicked(1);
+        }
 
+        private void butt_bit2_Click(object sender, RoutedEventArgs e)
+        {
+            buttonClicked(2);
+        }
+        private void butt_bit3_Click(object sender, RoutedEventArgs e)
+        {
+            buttonClicked(3);
+        }
     }
 
     public class parseSubString
