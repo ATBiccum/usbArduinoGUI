@@ -96,7 +96,7 @@ namespace usbArduinoGUI
         private void UpdateUI(string text)
         {
             checkSumCalculated = 0; //Reset the calculated checksum otherwise it will keep addin
-
+            
             text_packetReceived.Text = text + text_packetReceived.Text; //Show the received text
             text_packetLength.Text = text.Length.ToString();
 
@@ -108,6 +108,7 @@ namespace usbArduinoGUI
                 //If a real packet then save the corresponding bytes:
                 string placeholder = parseSubString.parseString(text, 3); //Place holds our 3 hashtags to parse correctly 
                 text_packetNumber.Text = parseSubString.parseString(text, 3);
+                newPacketNumber = Convert.ToInt32(text_packetNumber.Text);
                 text_A0.Text = parseSubString.parseString(text, 4);
                 text_A1.Text = parseSubString.parseString(text, 4);
                 text_A2.Text = parseSubString.parseString(text, 4);
@@ -137,18 +138,22 @@ namespace usbArduinoGUI
                     text_checkSumError.Text = checkSumError.ToString();     //Print the amount of errors into the text box
                 }
 
-                if (oldPacketNumber > -1 && newPacketNumber == 0)
+                if (oldPacketNumber > -1)                                   
                 {
-                    packetRollover++;
-                    text_packetRollover.Text = packetRollover.ToString();
-                    if (oldPacketNumber != 999)
-                    {
-                        lostPacketCount++;
-                        text_packetLost.Text = lostPacketCount.ToString();
-                    }
+                    if (newPacketNumber == 0)                               //New packet value receives value from packetNumber text
+                    {                                                       //So when firmware rolls packet over we enter here
+                        packetRollover++;
+                        text_packetRollover.Text = packetRollover.ToString();
+                        if (oldPacketNumber != 999)
+                        {
+                            lostPacketCount++;
+                            text_packetLost.Text = lostPacketCount.ToString();
+                        }
+   
+                    }                     
                     else
-                    {
-                        if (newPacketNumber != oldPacketNumber + 1)
+                    {                                                       //If there is no rollover check if we lost a packet 
+                        if (newPacketNumber != oldPacketNumber + 1)         //Keep track of previous packet and if it's diff from new lost packet
                         {
                             lostPacketCount++;
                             text_packetLost.Text = lostPacketCount.ToString();
