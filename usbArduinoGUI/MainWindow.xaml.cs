@@ -5,6 +5,9 @@
  * Tony Biccum
  * November 4th, 2021
  * 
+ * This project creates a GUI for solar panel data received from the meadow board.
+ * It communicates through packets and can send packets to the meadow to turn on LEDs.
+ * 
  */
 using System;
 using System.Collections.Generic;
@@ -29,9 +32,10 @@ namespace usbArduinoGUI
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Initialize variables
         private bool bPortOpen = false;
         private string text;
-
+         
         private int checkSumError = 0;
         private int checkSumCalculated = 0;
         private int oldPacketNumber = -1;
@@ -61,6 +65,7 @@ namespace usbArduinoGUI
                 comboBox1.Items.Add(port);
             }
             comboBox1.SelectedIndex = 2;                //Select the correct port from the list
+            //Initialize some values so we dont start the program empty
             text_packetReceived.Text = "###0000000000000000000000000000000000";
             text_Send.Text = "###0000000";
             text_checkSumError.Text = "0";
