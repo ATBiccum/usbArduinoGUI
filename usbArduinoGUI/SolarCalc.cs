@@ -8,7 +8,10 @@ namespace usbArduinoGUI
     {
         //Field 
         private static double ResistorValue;
+        private const int numberOfSamples = 5;
+        private static int currentIndex;
         public double[] analogVoltage = new double[6];
+        private double[,] slidingWindowVoltage = new double[6, numberOfSamples];
 
 
         //Constructor that takes no argument
@@ -25,7 +28,29 @@ namespace usbArduinoGUI
                 analogVoltage[i] = Convert.ToDouble(newPacket.Substring(6 + (i * 4), 4));
                 /*int thing = 6 + (i * 4);
                 analogVoltage[i] = Convert.ToDouble(parseSubString.parseString(newPacket, 4));*/
+                analogVoltage[i] = averageVoltage(analogVoltage[i], i);
             }
+        }
+
+        private double averageVoltage(double voltageToAverage, int indexOfAnalog)
+        {
+            double sum;
+
+            if (currentIndex >= numberOfSamples)
+            {
+                currentIndex = 0;
+            }
+            slidingWindowVoltage[indexOfAnalog, currentIndex] = voltageToAverage;
+            sum = 0;
+            for (int i = 0; i < numberOfSamples; i++)
+            {
+                sum += slidingWindowVoltage[indexOfAnalog, i];
+            }
+            if (indexOfAnalog == 5)
+            {
+                currentIndex++;
+            }
+            return sum / numberOfSamples;
         }
 
         public string GetVoltage(double value)
