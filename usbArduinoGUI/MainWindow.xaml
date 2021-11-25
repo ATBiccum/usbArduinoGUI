@@ -238,30 +238,35 @@
                  Grid.Column="1"
                  Grid.Row="3"                 
                  VerticalContentAlignment="Center"
+                 FontFamily="Mono"
                  IsEnabled="False"/>
         <Label Grid.Row="4">Battery Voltage</Label>
         <TextBox x:Name="text_batteryVoltage" 
                  Grid.Column="1"
                  Grid.Row="4"                 
                  VerticalContentAlignment="Center"
+                 FontFamily="Mono"
                  IsEnabled="False"/>
         <Label Grid.Row="5">Battery Current</Label>
         <TextBox x:Name="text_batteryCurrent" 
                  Grid.Column="1"
                  Grid.Row="5"                 
                  VerticalContentAlignment="Center"
+                 FontFamily="Mono"
                  IsEnabled="False"/>
         <Label Grid.Row="6">LED 1 Current</Label>
         <TextBox x:Name="text_ledCurrent1" 
                  Grid.Column="1"
                  Grid.Row="6"                 
                  VerticalContentAlignment="Center"
+                 FontFamily="Mono"
                  IsEnabled="False"/>
         <Label Grid.Row="7">LED 2 Current</Label>
         <TextBox x:Name="text_ledCurrent2" 
                  Grid.Column="1"
                  Grid.Row="7"                 
                  VerticalContentAlignment="Center"
+                 FontFamily="Mono"
                  IsEnabled="False"/>
     </Grid>
 
