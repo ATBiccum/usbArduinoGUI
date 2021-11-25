@@ -46,6 +46,7 @@ namespace usbArduinoGUI
 
         private StringBuilder stringBuilder = new StringBuilder("###1111196");
         private SerialPort serialport = new SerialPort();
+        SolarCalc solarcalc = new SolarCalc();
 
         public MainWindow()
         {
@@ -167,6 +168,12 @@ namespace usbArduinoGUI
         private void displaySolarData(string text)
         {
             //Display data for solar
+            solarcalc.ParseSolarData(text);
+            text_solarVoltage.Text = solarcalc.GetVoltage(solarcalc.analogVoltage[0]);
+            text_batteryVoltage.Text = solarcalc.GetVoltage(solarcalc.analogVoltage[2]);
+            text_batteryCurrent.Text = solarcalc.GetCurrent(solarcalc.analogVoltage[1], solarcalc.analogVoltage[2]);
+            text_ledCurrent1.Text = solarcalc.GetCurrent(solarcalc.analogVoltage[1], solarcalc.analogVoltage[4]);
+            text_ledCurrent2.Text = solarcalc.GetCurrent(solarcalc.analogVoltage[1], solarcalc.analogVoltage[3]);
         }
 
         private void butt_OpenClose_Click(object sender, RoutedEventArgs e)
@@ -205,18 +212,18 @@ namespace usbArduinoGUI
                 {
                     txCheckSum += (byte)stringBuilder[i];                   //Add up the bytes that were passed to string builder
                 }
-                    txCheckSum %= 1000;
+                txCheckSum %= 1000;
 
-                    stringBuilder.Remove(7, 3);                                 //Remove the check sum at index 7 size 3
-                    stringBuilder.Insert(7, txCheckSum.ToString("D3"));         //Add D3 to make sure theres the right number of digits
-                    text_Send.Text = stringBuilder.ToString();
+                stringBuilder.Remove(7, 3);                                 //Remove the check sum at index 7 size 3
+                stringBuilder.Insert(7, txCheckSum.ToString("D3"));         //Add D3 to make sure theres the right number of digits
+                text_Send.Text = stringBuilder.ToString();
 
-                    string messageOut = stringBuilder.ToString();               //Read the packet in the box
-                    messageOut += "\r\n";                                       //Add a carriage and line return to message
-                    byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);   //Convert to a byte array
-                    serialport.Write(messageBytes, 0, messageBytes.Length);     //Write the bytes to the serial port to send
-                    txCheckSum = 0; 
-             }
+                string messageOut = stringBuilder.ToString();               //Read the packet in the box
+                messageOut += "\r\n";                                       //Add a carriage and line return to message
+                byte[] messageBytes = Encoding.UTF8.GetBytes(messageOut);   //Convert to a byte array
+                serialport.Write(messageBytes, 0, messageBytes.Length);     //Write the bytes to the serial port to send
+                txCheckSum = 0;
+            }
              catch (Exception ex)
              {
                  MessageBox.Show(ex.Message);                            //Throw an exception instead of crashing
