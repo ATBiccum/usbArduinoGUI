@@ -26,8 +26,7 @@ namespace usbArduinoGUI
             for(int i = 0; i < 6; i++)
             {
                 analogVoltage[i] = Convert.ToDouble(newPacket.Substring(6 + (i * 4), 4));
-                /*int thing = 6 + (i * 4);
-                analogVoltage[i] = Convert.ToDouble(parseSubString.parseString(newPacket, 4));*/
+                //analogVoltage[i] = Convert.ToDouble(parseSubString.parseString(newPacket, 4));
                 analogVoltage[i] = averageVoltage(analogVoltage[i], i);
             }
         }
@@ -60,18 +59,19 @@ namespace usbArduinoGUI
         }
         public string GetCurrent(double analogOne, double shuntResistor)
         {
-            double shuntVoltage = (analogOne - shuntResistor) / ResistorValue;
+            double temp = analogOne - shuntResistor;
+            double shuntVoltage = temp / ResistorValue;
             return shuntVoltage.ToString(" 0.0 mA; -0.0 mA; 0.0 mA"); //If posisitive format like first, negative like second, zero like 3rd
         }
 
         public string LEDCurrent(double analogOne, double shuntResistor)
         {
-            double shuntVoltage = (analogOne - shuntResistor) / ResistorValue;
-            if (shuntVoltage < 0)
+            double value = (analogOne - shuntResistor) / ResistorValue;
+            if (value < 0)
             {
-                shuntVoltage = 0;
+                value = 0;
             }
-            return shuntVoltage.ToString(" 0.0 mA; -0.0 mA; 0.0 mA"); //If posisitive format like first, negative like second, zero like 3rd
+            return value.ToString(" 0.0 mA; -0.0 mA; 0.0 mA"); //If posisitive format like first, negative like second, zero like 3rd
         }
     }
 }

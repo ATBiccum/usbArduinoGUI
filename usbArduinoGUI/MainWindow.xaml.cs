@@ -172,8 +172,8 @@ namespace usbArduinoGUI
             text_solarVoltage.Text = solarcalc.GetVoltage(solarcalc.analogVoltage[0]);
             text_batteryVoltage.Text = solarcalc.GetVoltage(solarcalc.analogVoltage[2]);
             text_batteryCurrent.Text = solarcalc.GetCurrent(solarcalc.analogVoltage[1], solarcalc.analogVoltage[2]);
-            text_ledCurrent1.Text = solarcalc.GetCurrent(solarcalc.analogVoltage[1], solarcalc.analogVoltage[4]);
-            text_ledCurrent2.Text = solarcalc.GetCurrent(solarcalc.analogVoltage[1], solarcalc.analogVoltage[3]);
+            text_ledCurrent1.Text = solarcalc.LEDCurrent(solarcalc.analogVoltage[1], solarcalc.analogVoltage[4]);
+            text_ledCurrent2.Text = solarcalc.LEDCurrent(solarcalc.analogVoltage[1], solarcalc.analogVoltage[3]);
         }
 
         private void butt_OpenClose_Click(object sender, RoutedEventArgs e)
